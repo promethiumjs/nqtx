@@ -1,6 +1,6 @@
 {
   "name": "nqtx",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "State management library for nqtui",
   "source": "src/nqtx.js",
   "main": "nqtx.js",

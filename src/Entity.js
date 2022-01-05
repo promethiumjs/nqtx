@@ -68,7 +68,9 @@ export default class Entity {
       componentSubs[particleId].forEach((storeId) => renderComponent(storeId));
     }
     if (otherSubs[particleId])
-      setTimeout(() => otherSubs[particleId].forEach((listener) => listener()));
+      setTimeout(() =>
+        otherSubs[particleId].forEach((listener) => listener(newState))
+      );
     setPreventMultipleRenders(false);
   }
 
@@ -138,8 +140,16 @@ export default class Entity {
     }
     if (otherSubs[derivativeId])
       setTimeout(() =>
-        otherSubs[derivativeId].forEach((listener) => listener())
+        otherSubs[derivativeId].forEach((listener) => listener(newState))
       );
+  }
+
+  getParticleStates() {
+    return this.particles.states;
+  }
+
+  getDerivativeStates() {
+    return this.derivatives.states;
   }
 
   getParticle({ id, storeId }) {
