@@ -1,15 +1,39 @@
 {
   "name": "nqtx",
   "version": "0.0.1",
-  "description": "",
+  "description": "State management library for nqtui",
+  "source": "src/nqtx.js",
   "main": "nqtx.js",
+  "type": "module",
   "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build --no-optimize && terser nqtx.js --compress --output nqtx.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/promethiumjs/nqtx.git"
+  },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "default": "./nqtx.js"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/promethiumjs/nqtx/issues"
+  },
+  "homepage": "https://github.com/promethiumjs/nqtx#readme",
+  "keywords": [
+    "frontend",
+    "state management",
+    "state",
+    "nqtui",
+    "javascript"
+  ],
   "devDependencies": {
+    "jsdoc": "^3.6.7",
     "parcel": "^2.0.1"
   }
 }
