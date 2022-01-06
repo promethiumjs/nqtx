@@ -41,7 +41,7 @@ export default class Entity {
     return entity;
   }
 
-  //obtain adaptation methods from nqtui to power nqtx adaptations
+  //obtain adaptation methods from nqtui to power nqtx adaptations.
   addAdaptationMethods(methods) {
     addAdaptationMethods(methods);
   }
@@ -116,7 +116,7 @@ export default class Entity {
     const componentSubs = this.derivatives.componentSubs;
     const otherSubs = this.derivatives.otherSubs;
 
-    //generate new state of derivative
+    //generate new state of derivative.
     let newState;
     try {
       newState = transforms[derivativeId]({
@@ -157,7 +157,7 @@ export default class Entity {
     if (!this._particles[id]) {
       const surrogate = {
         state: null,
-        getState: () => {},
+        get: () => {},
         mutate: () => {},
         set: () => {},
         subscribe: () => {},
@@ -214,7 +214,7 @@ export default class Entity {
 
     this._particles[id] = {
       state: states[id],
-      getState: () => states[id],
+      get: () => states[id],
       mutate: (mutation, payload) => {
         this.set({
           particleId: id,
@@ -237,7 +237,7 @@ export default class Entity {
         //set properties to null to release all existing references to the particle
         //and it's properties to enable garbage collection and avoid memory leaks.
         this._particles[id].state = null;
-        this._particles[id].getState = null;
+        this._particles[id].get = null;
         this._particles[id].mutate = null;
         this._particles[id].set = null;
         this._particles[id].subscribe = null;
@@ -272,7 +272,7 @@ export default class Entity {
     if (!this._derivatives[id]) {
       const surrogate = {
         state: null,
-        getState: () => {},
+        get: () => {},
         subscribe: () => {},
         detonate: () => {},
         unavailable: true,
@@ -333,7 +333,7 @@ export default class Entity {
 
     this._derivatives[id] = {
       state: states[id],
-      getState: (payload) =>
+      get: (payload) =>
         transforms[id]({
           get: (particleId) => this.get({ particleId, derivativeId: id }),
           payload,
@@ -353,7 +353,7 @@ export default class Entity {
         //set properties to null to release all existing references to the derivative
         //and it's properties to enable garbage collection and avoid memory leaks.
         this._derivatives[id].state = null;
-        this._derivatives[id].getState = null;
+        this._derivatives[id].get = null;
         this._derivatives[id].subscribe = null;
         this._derivatives[id].detonate = null;
 

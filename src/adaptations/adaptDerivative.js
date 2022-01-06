@@ -27,32 +27,42 @@ function adaptDerivative(id) {
         id,
         storeId: currentStoreId,
       });
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
-        derivative[0];
+      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] = [
+        derivative[0].state,
+        derivative[0],
+      ];
       currentStore.derivativeCleanups[
         currentStore.currentAdaptationIds.derivativeCleanup
       ] = derivative[1];
+
       if (
-        currentStore.derivatives[currentStore.currentAdaptationIds.derivative]
-          .unavailable
+        currentStore.derivatives[
+          currentStore.currentAdaptationIds.derivative
+        ][1].unavailable
       ) {
         addNqtxUpdate(currentStoreId);
       }
     }
     if (
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative]
+      currentStore.derivatives[currentStore.currentAdaptationIds.derivative][1]
         .unavailable
     ) {
       let derivative = currentEntity.getDerivative({
         id,
         storeId: currentStoreId,
       });
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
-        derivative[0];
+      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] = [
+        derivative[0].state,
+        derivative[0],
+      ];
       currentStore.derivativeCleanups[
         currentStore.currentAdaptationIds.derivativeCleanup
       ] = derivative[1];
     }
+
+    let derivative0 =
+      currentStore.derivatives[currentStore.currentAdaptationIds.derivative];
+    derivative0[0] = derivative0[1].state;
 
     return currentStore.derivatives[
       currentStore.currentAdaptationIds.derivative++
