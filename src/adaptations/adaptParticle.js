@@ -3,7 +3,6 @@ import {
   getCurrentStoreId,
   getCurrentEntity,
 } from "./adaptations";
-import addNqtxUpdate from "./nqtxUpdates";
 
 function adaptParticle(id) {
   const currentStore = getCurrentStore();
@@ -29,28 +28,7 @@ function adaptParticle(id) {
       currentStore.particleCleanups[
         currentStore.currentAdaptationIds.particleCleanup
       ] = particle[1];
-
-      if (
-        currentStore.particles[currentStore.currentAdaptationIds.particle][1]
-          .unavailable
-      ) {
-        addNqtxUpdate(currentStoreId);
-      }
     }
-    if (
-      currentStore.particles[currentStore.currentAdaptationIds.particle][1]
-        .unavailable
-    ) {
-      let particle = currentEntity.getParticle({ id, storeId: currentStoreId });
-      currentStore.particles[currentStore.currentAdaptationIds.particle] = [
-        particle[0].state,
-        particle[0],
-      ];
-      currentStore.particleCleanups[
-        currentStore.currentAdaptationIds.particleCleanup
-      ] = particle[1];
-    }
-
     let particle0 =
       currentStore.particles[currentStore.currentAdaptationIds.particle];
     particle0[0] = particle0[1].state;

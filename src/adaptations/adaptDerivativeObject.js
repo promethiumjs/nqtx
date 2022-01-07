@@ -3,7 +3,6 @@ import {
   getCurrentStoreId,
   getCurrentEntity,
 } from "./adaptations";
-import addNqtxUpdate from "./nqtxUpdates";
 
 function adaptDerivativeObject(id) {
   const currentStore = getCurrentStore();
@@ -22,21 +21,6 @@ function adaptDerivativeObject(id) {
       !(
         currentStore.currentAdaptationIds.derivative in currentStore.derivatives
       )
-    ) {
-      let derivative = currentEntity.getDerivative({ id });
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
-        derivative;
-
-      if (
-        currentStore.derivatives[currentStore.currentAdaptationIds.derivative]
-          .unavailable
-      ) {
-        addNqtxUpdate(currentStoreId);
-      }
-    }
-    if (
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative]
-        .unavailable
     ) {
       let derivative = currentEntity.getDerivative({ id });
       currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =

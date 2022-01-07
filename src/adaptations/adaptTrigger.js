@@ -3,7 +3,6 @@ import {
   getCurrentStoreId,
   getCurrentEntity,
 } from "./adaptations";
-import addNqtxUpdate from "./nqtxUpdates";
 
 function adaptTrigger(id) {
   const currentStore = getCurrentStore();
@@ -17,19 +16,6 @@ function adaptTrigger(id) {
 
   if (currentStore) {
     if (!(currentStore.currentAdaptationIds.trigger in currentStore.triggers)) {
-      currentStore.triggers[currentStore.currentAdaptationIds.trigger] =
-        currentEntity.getTrigger({ id });
-      if (
-        currentStore.triggers[currentStore.currentAdaptationIds.trigger]
-          .unavailable
-      ) {
-        addNqtxUpdate(currentStoreId);
-      }
-    }
-    if (
-      currentStore.triggers[currentStore.currentAdaptationIds.trigger]
-        .unavailable
-    ) {
       currentStore.triggers[currentStore.currentAdaptationIds.trigger] =
         currentEntity.getTrigger({ id });
     }
