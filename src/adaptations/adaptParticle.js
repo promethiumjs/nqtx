@@ -12,6 +12,9 @@ function adaptParticle(id) {
   if (currentStore && !currentStore.particles) {
     currentStore.particles = [];
     currentStore.currentAdaptationIds.particle = 0;
+  }
+
+  if (currentStore && !currentStore.particleCleanups) {
     currentStore.particleCleanups = [];
     currentStore.currentAdaptationIds.particleCleanup = 0;
   }

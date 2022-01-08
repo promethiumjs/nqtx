@@ -12,6 +12,9 @@ function adaptDerivative(id) {
   if (currentStore && !currentStore.derivatives) {
     currentStore.derivatives = [];
     currentStore.currentAdaptationIds.derivative = 0;
+  }
+
+  if (currentStore && !currentStore.derivativeCleanups) {
     currentStore.derivativeCleanups = [];
     currentStore.currentAdaptationIds.derivativeCleanup = 0;
   }
