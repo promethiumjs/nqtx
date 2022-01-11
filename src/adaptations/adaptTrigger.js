@@ -1,12 +1,7 @@
-import {
-  getCurrentStore,
-  getCurrentStoreId,
-  getCurrentEntity,
-} from "./adaptations";
+import { getCurrentStore, getCurrentEntity } from "./adaptations";
 
 function adaptTrigger(id) {
   const currentStore = getCurrentStore();
-  const currentStoreId = getCurrentStoreId();
   const currentEntity = getCurrentEntity();
 
   if (currentStore && !currentStore.triggers) {

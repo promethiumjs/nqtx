@@ -20,10 +20,14 @@ export default function setDerivative({
   } else if (states[id] === undefined) {
     try {
       states[id] = transforms[id]({
-        get: (particleId) =>
-          this.get({ particleId, derivativeId: id, firstTime: true }),
-        getPrevious: (particleId) =>
-          this.getPrevious({ particleId, derivativeId: id, firstTime: true }),
+        getState: (particleId) =>
+          this.getState({ particleId, derivativeId: id, firstTime: true }),
+        getPreviousState: (particleId) =>
+          this.getPreviousState({
+            particleId,
+            derivativeId: id,
+            firstTime: true,
+          }),
       });
     } catch (err) {
       states[id] = null;
@@ -36,9 +40,10 @@ export default function setDerivative({
     state: states[id],
     get: (payload) => {
       return transforms[id]({
-        get: (particleId) => this.get({ particleId, derivativeId: id }),
-        getPrevious: (particleId) =>
-          this.getPrevious({ particleId, derivativeId: id }),
+        getState: (particleId) =>
+          this.getState({ particleId, derivativeId: id }),
+        getPreviousState: (particleId) =>
+          this.getPreviousState({ particleId, derivativeId: id }),
         payload,
         state: states[id],
       });

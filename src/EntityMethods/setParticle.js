@@ -1,11 +1,13 @@
 export default function setParticle({
   id,
   initialState,
-  mutator,
+  mutations,
+  actions,
   previousState,
 }) {
   const states = this.particles.states;
-  const mutators = this.particles.mutators;
+  const mutationStore = this.particles.mutations;
+  const actionStore = this.particles.actions;
   const derivativeSubs = this.particles.derivativeSubs;
   const componentSubs = this.particles.componentSubs;
   const otherSubs = this.particles.otherSubs;
@@ -16,18 +18,24 @@ export default function setParticle({
   } else if (states[id] === undefined) {
     states[id] = null;
   }
-  if (mutator) {
-    mutators[id] = mutator;
+  if (mutations) {
+    mutationStore[id] = mutations;
+  }
+  if (actions) {
+    actionStore[id] = actions;
   }
 
   this._particles[id] = {
     state: states[id],
     get: () => states[id],
-    mutate: (mutation, payload) => {
+    commit: (mutation, payload) => {
       this.set({
         particleId: id,
-        newState: mutators[id][mutation]({ state: states[id], payload }),
+        newState: mutationStore[id][mutation]({ state: states[id], payload }),
       });
+    },
+    dispatch: (action, payload) => {
+      actionStore[id][action]({ $context: this._particles[id], payload });
     },
     set: (newState) => this.set({ particleId: id, newState }),
     subscribe: (listener) => {
@@ -62,7 +70,8 @@ export default function setParticle({
       this._particles[id].state = null;
       this._particles[id].previous = null;
       this._particles[id].get = null;
-      this._particles[id].mutate = null;
+      this._particles[id].commit = null;
+      this._particles[id].dispatch = null;
       this._particles[id].set = null;
       this._particles[id].subscribe = null;
       this._particles[id].subscribe_instant = null;
@@ -70,7 +79,8 @@ export default function setParticle({
 
       delete this._particles[id];
       delete states[id];
-      delete mutators[id];
+      delete mutationStore[id];
+      delete actionStore[id];
       delete derivativeSubs[id];
       delete componentSubs[id];
       delete otherSubs[id];

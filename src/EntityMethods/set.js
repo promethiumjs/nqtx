@@ -1,7 +1,5 @@
-import {
-  setPreventMultipleRenders,
-  renderComponent,
-} from "../adaptations/adaptations";
+import { renderComponent } from "../adaptations/adaptations";
+import queueRunSubscription from "./queueRunSubscription";
 
 export default function set({ particleId, newState }) {
   const _particle = this._particles[particleId];
@@ -11,23 +9,21 @@ export default function set({ particleId, newState }) {
   const otherSubs = this.particles.otherSubs;
   const otherSubs_instant = this.particles.otherSubs_instant;
 
-  if (_particle.previous !== undefined) _particle.previous = _particle.state;
+  const previousState = _particle.state;
+  if (_particle.previous !== undefined) _particle.previous = previousState;
 
   //the state has to be updated in two places because of the presence of this.particles
   //and this._particles.
   if (newState !== undefined) {
+    if (Object.is(newState, previousState)) return;
     _particle.state = newState;
     states[particleId] = newState;
-  } else {
-    _particle.state = null;
-    states[particleId] = null;
   }
 
-  //update all subscribers while avoiding redundant renders.
-  setPreventMultipleRenders(true);
+  //update all subscribers.
   if (otherSubs_instant[particleId])
     otherSubs_instant[particleId].forEach((listener) =>
-      listener(newState, _particle.previous)
+      listener(newState, previousState)
     );
   if (derivativeSubs[particleId])
     derivativeSubs[particleId].forEach((derivativeId) =>
@@ -37,10 +33,7 @@ export default function set({ particleId, newState }) {
     componentSubs[particleId].forEach((storeId) => renderComponent(storeId));
   }
   if (otherSubs[particleId])
-    setTimeout(() =>
-      otherSubs[particleId].forEach((listener) =>
-        listener(newState, _particle.previous)
-      )
+    otherSubs[particleId].forEach((listener) =>
+      queueRunSubscription(() => listener(newState, previousState))
     );
-  setPreventMultipleRenders(false);
 }

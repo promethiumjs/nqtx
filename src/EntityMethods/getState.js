@@ -1,8 +1,9 @@
-export default function get({ particleId, derivativeId, firstTime }) {
+export default function getState({ particleId, derivativeId, firstTime }) {
   const states = this.particles.states;
   if (states[particleId] === undefined) {
     console.error(
-      `The particle you are trying to access with id: ${particleId} doesn't exist`
+      `The particle you are trying to access with id: ${particleId} doesn't exist or has its
+       state set to undefined`
     );
     throw new Error(`Cannot access state of particle: "${particleId}"`);
   }

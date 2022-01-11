@@ -1,7 +1,12 @@
-import { getCurrentStore, getCurrentEntity } from "./adaptations";
+import {
+  getCurrentStore,
+  getCurrentStoreId,
+  getCurrentEntity,
+} from "./adaptations";
 
-function adaptDerivativeObject(id) {
+function adaptDerivativeState(id) {
   const currentStore = getCurrentStore();
+  const currentStoreId = getCurrentStoreId();
   const currentEntity = getCurrentEntity();
 
   if (currentStore && !currentStore.derivatives) {
@@ -17,19 +22,22 @@ function adaptDerivativeObject(id) {
         currentStore.currentAdaptationIds.derivative in currentStore.derivatives
       )
     ) {
-      let derivative = currentEntity.getDerivative({ id });
+      let derivative = currentEntity.getDerivative({
+        id,
+        storeId: currentStoreId,
+      });
       currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
-        derivative;
+        derivative[0];
     }
 
     return currentStore.derivatives[
       currentStore.currentAdaptationIds.derivative++
-    ];
+    ].state;
   } else {
     throw new Error(
-      "adaptDerivativeObject() can only be used inside a Component or a Custom Adaptation."
+      "adaptDerivativeState() can only be used inside a Component or a Custom Adaptation."
     );
   }
 }
 
-export default adaptDerivativeObject;
+export default adaptDerivativeState;

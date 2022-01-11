@@ -1,10 +1,15 @@
-export default function getPrevious({ particleId, derivativeId, firstTime }) {
+export default function getPreviousState({
+  particleId,
+  derivativeId,
+  firstTime,
+}) {
   const _particle = this._particles[particleId];
 
-  if (_particle.previous === undefined) {
-    console.error(
-      `The particle you are trying to access with id: ${particleId} either 
-        doesn't exist or doesn't have it's "previousState" flag set to true`
+  if (!_particle || _particle.previous === undefined) {
+    console.warn(
+      `The particle you are trying to access with id: ${particleId} either doesn't exist,
+       has it's previous state set to undefined, or doesn't have it's "previousState" 
+       flag set to true`
     );
     throw new Error(
       `Cannot access previous state of particle: "${particleId}"`

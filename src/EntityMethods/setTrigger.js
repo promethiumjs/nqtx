@@ -20,6 +20,7 @@ export default function setTrigger({ id, initialSubscriptions }) {
       //and it's properties to enable garbage collection and avoid memory leaks.
       this._triggers[id].invoke = null;
       this._triggers[id].subscribe = null;
+      this._triggers[id].detonate = null;
 
       delete this._triggers[id];
       delete subscriptions[id];

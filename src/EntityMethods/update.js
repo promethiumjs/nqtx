@@ -1,4 +1,5 @@
 import { renderComponent } from "../adaptations/adaptations";
+import queueRunSubscription from "./queueRunSubscription";
 
 export default function update({ derivativeId }) {
   const _derivative = this._derivatives[derivativeId];
@@ -8,15 +9,15 @@ export default function update({ derivativeId }) {
   const otherSubs = this.derivatives.otherSubs;
   const otherSubs_instant = this.derivatives.otherSubs_instant;
 
-  if (_derivative.previous !== undefined)
-    _derivative.previous = _derivative.state;
+  const previousState = _derivative.state;
+  if (_derivative.previous !== undefined) _derivative.previous = previousState;
 
   //generate new state of derivative.
   let newState;
   try {
     newState = transforms[derivativeId]({
-      get: (particleId) => this.get({ particleId, derivativeId }),
-      getPrevious: (particleId) => this.getPrevious({ particleId }),
+      getState: (particleId) => this.getState({ particleId, derivativeId }),
+      getPreviousState: (particleId) => this.getPreviousState({ particleId }),
       state: states[derivativeId],
     });
   } catch (err) {
@@ -25,27 +26,21 @@ export default function update({ derivativeId }) {
 
   //the state has to be updated in two places because of the presence of this.derivatives
   //and this._derivatives.
-  if (newState !== undefined) {
-    _derivative.state = newState;
-    states[derivativeId] = newState;
-  } else {
-    _derivative.state = null;
-    states[derivativeId] = null;
-  }
+  if (newState === undefined) return;
+  if (Object.is(newState, previousState)) return;
+  _derivative.state = newState;
+  states[derivativeId] = newState;
 
-  //update all subscribers(redundant renders have already been prevented in
-  //the "set" function).
+  //update all subscribers.
   if (otherSubs_instant[derivativeId])
     otherSubs_instant[derivativeId].forEach((listener) =>
-      listener(newState, _derivative.previous)
+      listener(newState, previousState)
     );
   if (componentSubs[derivativeId]) {
     componentSubs[derivativeId].forEach((storeId) => renderComponent(storeId));
   }
   if (otherSubs[derivativeId])
-    setTimeout(() =>
-      otherSubs[derivativeId].forEach((listener) =>
-        listener(newState, _derivative.previous)
-      )
+    otherSubs[derivativeId].forEach((listener) =>
+      queueRunSubscription(() => listener(newState, previousState))
     );
 }

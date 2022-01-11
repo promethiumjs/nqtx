@@ -1,17 +1,23 @@
 import Entity from "./Entity";
 import adaptEntity from "./adaptations/adaptEntity";
 import adaptParticle from "./adaptations/adaptParticle";
-import adaptParticleObject from "./adaptations/adaptParticleObject";
+import adaptParticleState from "./adaptations/adaptParticleState";
+import adaptParticleContext from "./adaptations/adaptParticleContext";
 import adaptDerivative from "./adaptations/adaptDerivative";
-import adaptDerivativeObject from "./adaptations/adaptDerivativeObject";
+import adaptDerivativeState from "./adaptations/adaptDerivativeState";
+import adaptDerivativeContext from "./adaptations/adaptDerivativeContext";
+import adaptCatalyst from "./adaptations/adaptCatalyst";
 import adaptTrigger from "./adaptations/adaptTrigger";
 
 export default Entity;
 export {
-  adaptTrigger,
   adaptEntity,
   adaptParticle,
-  adaptParticleObject,
+  adaptParticleState,
+  adaptParticleContext,
   adaptDerivative,
-  adaptDerivativeObject,
+  adaptDerivativeState,
+  adaptDerivativeContext,
+  adaptCatalyst,
+  adaptTrigger,
 };

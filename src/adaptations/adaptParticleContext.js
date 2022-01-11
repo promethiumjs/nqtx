@@ -1,6 +1,6 @@
 import { getCurrentStore, getCurrentEntity } from "./adaptations";
 
-function adaptParticleObject(id) {
+function adaptParticleContext(id) {
   const currentStore = getCurrentStore();
   const currentEntity = getCurrentEntity();
 
@@ -21,9 +21,9 @@ function adaptParticleObject(id) {
     return currentStore.particles[currentStore.currentAdaptationIds.particle++];
   } else {
     throw new Error(
-      "adaptParticleObject() can only be used inside a Component or a Custom Adaptation."
+      "adaptParticleContext() can only be used inside a Component or a Custom Adaptation."
     );
   }
 }
 
-export default adaptParticleObject;
+export default adaptParticleContext;
