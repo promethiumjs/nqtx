@@ -4,7 +4,7 @@ import {
   getCurrentEntity,
 } from "./adaptations";
 
-function adaptDerivative(id) {
+function adaptDerivative(id, subscribe) {
   const currentStore = getCurrentStore();
   const currentStoreId = getCurrentStoreId();
   const currentEntity = getCurrentEntity();
@@ -14,36 +14,40 @@ function adaptDerivative(id) {
     currentStore.currentAdaptationIds.derivative = 0;
   }
 
-  if (currentStore && !currentStore.derivativeCleanups) {
-    currentStore.derivativeCleanups = [];
-    currentStore.currentAdaptationIds.derivativeCleanup = 0;
-  }
-
   if (currentStore) {
     if (
       !(
         currentStore.currentAdaptationIds.derivative in currentStore.derivatives
       )
     ) {
-      let derivative = currentEntity.getDerivative({
-        id,
-        storeId: currentStoreId,
-      });
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] = [
-        derivative[0].state,
-        derivative[0],
-      ];
-      currentStore.derivativeCleanups[
-        currentStore.currentAdaptationIds.derivativeCleanup
-      ] = derivative[1];
-    }
-    let derivative0 =
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative];
-    derivative0[0] = derivative0[1].state;
+      if (subscribe === undefined || subscribe === true) {
+        if (currentStore && !currentStore.derivativeCleanups) {
+          currentStore.derivativeCleanups = [];
+          currentStore.currentAdaptationIds.derivativeCleanup = 0;
+        }
 
-    return currentStore.derivatives[
-      currentStore.currentAdaptationIds.derivative++
-    ];
+        let derivative = currentEntity.getDerivative({
+          id,
+          storeId: currentStoreId,
+        });
+
+        currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
+          derivative[0];
+
+        currentStore.derivativeCleanups[
+          currentStore.currentAdaptationIds.derivativeCleanup
+        ] = derivative[1];
+      } else {
+        let derivative = currentEntity.getDerivative({ id });
+
+        currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
+          derivative;
+      }
+    }
+    let $derivativeContext =
+      currentStore.derivatives[currentStore.currentAdaptationIds.derivative++];
+
+    return [$derivativeContext.state, $derivativeContext];
   } else {
     throw new Error(
       "adaptDerivative() can only be used inside a Component or a Custom Adaptation."

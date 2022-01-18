@@ -35,7 +35,10 @@ export default function setParticle({
       });
     },
     dispatch: (action, payload) => {
-      actionStore[id][action]({ $context: this._particles[id], payload });
+      return actionStore[id][action]({
+        $context: this._particles[id],
+        payload,
+      });
     },
     set: (newState) => this.set({ particleId: id, newState }),
     subscribe: (listener) => {

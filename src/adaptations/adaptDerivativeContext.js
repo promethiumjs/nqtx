@@ -1,14 +1,17 @@
-import { getCurrentStore, getCurrentEntity } from "./adaptations";
+import {
+  getCurrentStore,
+  getCurrentStoreId,
+  getCurrentEntity,
+} from "./adaptations";
 
-function adaptDerivativeContext(id) {
+function adaptDerivativeContext(id, subscribe) {
   const currentStore = getCurrentStore();
+  const currentStoreId = getCurrentStoreId();
   const currentEntity = getCurrentEntity();
 
   if (currentStore && !currentStore.derivatives) {
     currentStore.derivatives = [];
     currentStore.currentAdaptationIds.derivative = 0;
-    currentStore.derivativeCleanups = [];
-    currentStore.currentAdaptationIds.derivativeCleanup = 0;
   }
 
   if (currentStore) {
@@ -17,9 +20,29 @@ function adaptDerivativeContext(id) {
         currentStore.currentAdaptationIds.derivative in currentStore.derivatives
       )
     ) {
-      let derivative = currentEntity.getDerivative({ id });
-      currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
-        derivative;
+      if (subscribe === undefined || subscribe === true) {
+        if (currentStore && !currentStore.derivativeCleanups) {
+          currentStore.derivativeCleanups = [];
+          currentStore.currentAdaptationIds.derivativeCleanup = 0;
+        }
+
+        let derivative = currentEntity.getDerivative({
+          id,
+          storeId: currentStoreId,
+        });
+
+        currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
+          derivative[0];
+
+        currentStore.derivativeCleanups[
+          currentStore.currentAdaptationIds.derivativeCleanup
+        ] = derivative[1];
+      } else {
+        let derivative = currentEntity.getDerivative({ id });
+
+        currentStore.derivatives[currentStore.currentAdaptationIds.derivative] =
+          derivative;
+      }
     }
 
     return currentStore.derivatives[

@@ -7,7 +7,7 @@ export default function setCatalyst({ id, actions }) {
 
   this._catalysts[id] = {
     dispatch: (action, payload) => {
-      actionStore[id][action]({
+      return actionStore[id][action]({
         getContext: (particleId) => this.getContext({ particleId }),
         payload,
       });
