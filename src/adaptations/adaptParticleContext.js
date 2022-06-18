@@ -4,7 +4,7 @@ import {
   getCurrentEntity,
 } from "./adaptations";
 
-function adaptParticle(id, subscribe) {
+function adaptParticleContext(id, subscribe) {
   const currentStore = getCurrentStore();
   const currentStoreId = getCurrentStoreId();
   const currentEntity = getCurrentEntity();
@@ -41,15 +41,13 @@ function adaptParticle(id, subscribe) {
           particle;
       }
     }
-    let $particleContext =
-      currentStore.particles[currentStore.currentAdaptationIds.particle++];
 
-    return [$particleContext.state, $particleContext];
+    return currentStore.particles[currentStore.currentAdaptationIds.particle++];
   } else {
     throw new Error(
-      "adaptParticle() can only be used inside a Component or a Custom Adaptation."
+      "adaptParticleContext() can only be used inside a Component or a Custom Adaptation."
     );
   }
 }
 
-export default adaptParticle;
+export default adaptParticleContext;

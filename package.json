@@ -1,13 +1,14 @@
 {
   "name": "nqtx",
-  "version": "0.4.0",
+  "version": "0.9.0",
   "description": "State management library for nqtui",
-  "source": "src/nqtx.js",
+  "source": "src/nqtx.ts",
   "main": "nqtx.js",
+  "types": "types.d.ts",
   "type": "module",
   "scripts": {
     "watch": "parcel watch",
-    "build": "parcel build --no-optimize && terser nqtx.js --compress --output nqtx.js",
+    "build": "parcel build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
