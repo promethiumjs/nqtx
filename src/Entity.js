@@ -76,8 +76,8 @@ export default class Entity {
     this.setTrigger = setTrigger.bind(this);
   }
 
-  static create(initialParticleStates) {
-    const entity = new Entity(initialParticleStates);
+  static create(initial) {
+    const entity = new Entity(initial);
     setCurrentEntity(entity);
 
     return entity;
