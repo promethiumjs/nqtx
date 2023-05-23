@@ -1,3 +1,5 @@
+**Note: Nqtx has been moved into the Promethium JS package**
+
 # NQTX
 
 *The official state management solution for [nqtui](https://github.com/promethiumjs/nqtui)*
